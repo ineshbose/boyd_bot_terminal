@@ -1,8 +1,12 @@
+import os
 from selenium import webdriver
-from constants import URL, chromedriver, weekdayMapping
-from selenium.common.exceptions import UnexpectedAlertPresentException, NoSuchElementException, ElementNotInteractableException
+import selenium.common.exceptions as exceptions
 import time, datetime
 from getpass import getpass
+
+URL = "https://www.gla.ac.uk/apps/timetable/#/login"
+chromedriver = path = os.path.dirname(os.path.realpath(__file__)) + '/chromedriver'
+weekdayMapping = {"MONDAY":0, "TUESDAY":1, "WEDNESDAY":2, "THURSDAY":3, "FRIDAY":4}
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -17,26 +21,28 @@ def login():
     browser.find_element_by_xpath("//*[@id='app']/div/main/button").click()
     time.sleep(4)
     try:
-        #browser.current_url == "https://www.gla.ac.uk/apps/timetable/#/"
         browser.find_element_by_xpath("//*[@id='app']/div/div[1]/div[1]/a").click()
         time.sleep(1)
         if browser.current_url == "https://www.gla.ac.uk/apps/timetable/#/timetable":
             print("\nLogin successful!\n")
-            #read_today()
-            #read_week()
-    except UnexpectedAlertPresentException as e:
-        #browser.switch_to_alert().accept()
+    except exceptions.UnexpectedAlertPresentException as e:
         print("\nInvalid credentials! Try again.\n")
         browser.refresh()
         login()
-    except NoSuchElementException as load:
+    except exceptions.NoSuchElementException as load:
         print("\nSomething went wrong. Maybe the connection was too slow. Try again.\n")
         browser.refresh()
         login()
 
+def what_now():
+    current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    class_time = str(datetime.datetime.now() + (datetime.datetime.min - datetime.datetime.now()) % datetime.timedelta(hours=1)).split(' ')[1]
+    browser.fi
+    print(current_time)
+    print(class_time)
+
 def read_today():
     time.sleep(1)
-    #classes = browser.find_elements_by_class_name("fc-title")
     classes = browser.find_elements_by_class_name("fc-time-grid-event.fc-event.fc-start.fc-end")
     if classes == []:
         print("Either there are no classes, or something went wrong.")
@@ -49,12 +55,9 @@ def read_today():
                 table = browser.find_element_by_class_name("dialogueTable")
                 print(table.text, "\n")
                 browser.find_element_by_class_name("close.text-white").click()
-            except ElementNotInteractableException as e:
+            except exceptions.ElementNotInteractableException as e:
                 print("(Unable to fetch class)\n")
                 continue
-    #for clas in classes:
-        #print(clas.text)
-        #print(" ")
 
 def specific_day():
     date_entry = input('Enter a date in DD-MM-YYYY format: ')
@@ -98,6 +101,8 @@ def main():
             loop_days(int(input("How many days? ")))
         elif choice == 4:
             specific_day()
+        elif choice == 5:
+            what_now()
         else:
             print("Invalid input.")
         quit=input("Quit? [Y/N]: ")

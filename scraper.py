@@ -11,7 +11,8 @@ weekdayMapping = {"MONDAY":0, "TUESDAY":1, "WEDNESDAY":2, "THURSDAY":3, "FRIDAY"
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-browser = webdriver.Chrome(chromedriver, chrome_options=options)
+options.add_argument('--log-level=3')
+browser = webdriver.Chrome(chromedriver, options=options)
 
 def login():
     browser.get(URL)
@@ -33,13 +34,6 @@ def login():
         print("\nSomething went wrong. Maybe the connection was too slow. Try again.\n")
         browser.refresh()
         login()
-
-def what_now():
-    current_time = datetime.datetime.now().strftime("%H:%M:%S")
-    class_time = str(datetime.datetime.now() + (datetime.datetime.min - datetime.datetime.now()) % datetime.timedelta(hours=1)).split(' ')[1]
-    browser.fi
-    print(current_time)
-    print(class_time)
 
 def read_today():
     time.sleep(1)
@@ -101,8 +95,6 @@ def main():
             loop_days(int(input("How many days? ")))
         elif choice == 4:
             specific_day()
-        elif choice == 5:
-            what_now()
         else:
             print("Invalid input.")
         quit=input("Quit? [Y/N]: ")

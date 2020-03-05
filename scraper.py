@@ -39,7 +39,7 @@ def login():
         login()
 
 def read_today():
-    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-time-grid-event.fc-event.fc-start.fc-end"))
+    element_present = EC.visibility_of_all_elements_located((By.CLASS_NAME, "fc-time-grid-event.fc-event.fc-start.fc-end"))
     WebDriverWait(browser, 1).until(element_present)
     classes = browser.find_elements_by_class_name("fc-time-grid-event.fc-event.fc-start.fc-end")
     if classes == []:
@@ -49,7 +49,7 @@ def read_today():
         for clas in classes:
             try:
                 clas.click()
-                element_present = EC.presence_of_element_located((By.CLASS_NAME, "dialogueTable"))
+                element_present = EC.visibility_of_element_located((By.CLASS_NAME, "dialogueTable"))
                 WebDriverWait(browser, 1).until(element_present)
                 table = browser.find_element_by_class_name("dialogueTable")
                 print(table.text, "\n")
@@ -71,10 +71,10 @@ def loop_days(n):
     browser.find_element_by_class_name("fc-today-button.fc-button.fc-button-primary").click()
 
 def read_week():
-    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-listWeek-button.fc-button.fc-button-primary"))
+    element_present = EC.visibility_of_element_located((By.CLASS_NAME, "fc-listWeek-button.fc-button.fc-button-primary"))
     WebDriverWait(browser, 1).until(element_present)
     browser.find_element_by_class_name("fc-listWeek-button.fc-button.fc-button-primary").click()
-    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-list-table"))
+    element_present = EC.visibility_of_element_located((By.CLASS_NAME, "fc-list-table"))
     WebDriverWait(browser, 1).until(element_present)
     week = browser.find_element_by_class_name("fc-list-table")
     data = week.text

@@ -1,6 +1,9 @@
 import os
 from selenium import webdriver
 import selenium.common.exceptions as exceptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 import time, datetime
 from getpass import getpass
 
@@ -20,10 +23,10 @@ def login():
     browser.find_element_by_id("password").send_keys(getpass())
     print("\nLogging in..\n")
     browser.find_element_by_xpath("//*[@id='app']/div/main/button").click()
-    time.sleep(4)
     try:
+        element_present = EC.presence_of_element_located((By.XPATH, "//*[@id='app']/div/div[1]/div[1]/a"))
+        WebDriverWait(browser, 4).until(element_present)
         browser.find_element_by_xpath("//*[@id='app']/div/div[1]/div[1]/a").click()
-        time.sleep(1)
         if browser.current_url == "https://www.gla.ac.uk/apps/timetable/#/timetable":
             print("\nLogin successful!\n")
     except exceptions.UnexpectedAlertPresentException as e:
@@ -36,7 +39,8 @@ def login():
         login()
 
 def read_today():
-    time.sleep(1)
+    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-time-grid-event.fc-event.fc-start.fc-end"))
+    WebDriverWait(browser, 1).until(element_present)
     classes = browser.find_elements_by_class_name("fc-time-grid-event.fc-event.fc-start.fc-end")
     if classes == []:
         print("Either there are no classes, or something went wrong.")
@@ -45,7 +49,8 @@ def read_today():
         for clas in classes:
             try:
                 clas.click()
-                time.sleep(1)
+                element_present = EC.presence_of_element_located((By.CLASS_NAME, "dialogueTable"))
+                WebDriverWait(browser, 1).until(element_present)
                 table = browser.find_element_by_class_name("dialogueTable")
                 print(table.text, "\n")
                 browser.find_element_by_class_name("close.text-white").click()
@@ -66,9 +71,11 @@ def loop_days(n):
     browser.find_element_by_class_name("fc-today-button.fc-button.fc-button-primary").click()
 
 def read_week():
-    time.sleep(1)
+    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-listWeek-button.fc-button.fc-button-primary"))
+    WebDriverWait(browser, 1).until(element_present)
     browser.find_element_by_class_name("fc-listWeek-button.fc-button.fc-button-primary").click()
-    time.sleep(1)
+    element_present = EC.presence_of_element_located((By.CLASS_NAME, "fc-list-table"))
+    WebDriverWait(browser, 1).until(element_present)
     week = browser.find_element_by_class_name("fc-list-table")
     data = week.text
     days = []

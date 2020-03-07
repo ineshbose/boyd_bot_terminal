@@ -52,7 +52,7 @@ def read_today():
         WebDriverWait(browser, 1).until(element_present)
         classes = browser.find_elements_by_class_name("fc-time-grid-event.fc-event.fc-start.fc-end")
         print("\nYou have..")
-    
+        
         for clas in classes:
             try:
                 clas.click()
@@ -67,7 +67,21 @@ def read_today():
                 print((class_data[0] + " ({}) ".format(class_data[2]) + "\nfrom {} to {} ".format(class_data[4],class_data[5]) + "\nat {}.".format(class_data[1])) + "\n\n")
                 browser.find_element_by_class_name("close.text-white").click()
             
-            except exceptions.ElementNotInteractableException as e:
+            except exceptions.ElementNotInteractableException:
+                browser.implicitly_wait(3)
+                clas.click()
+                element_present = EC.visibility_of_element_located((By.CLASS_NAME, "dialogueTable"))
+                WebDriverWait(browser, 1).until(element_present)
+                table = browser.find_element_by_class_name("dialogueTable")
+                class_data = []
+               
+                for i in range(1,8):
+                    class_data.append(browser.find_element_by_xpath("//*[@id='eventModal']/div/div/div[2]/table/tr[{}]/td".format(str(i))).text) 
+               
+                print((class_data[0] + " ({}) ".format(class_data[2]) + "\nfrom {} to {} ".format(class_data[4],class_data[5]) + "\nat {}.".format(class_data[1])) + "\n\n")
+                browser.find_element_by_class_name("close.text-white").click()
+            
+            except:
                 print("(Unable to fetch class)\n")
                 continue
     
@@ -82,7 +96,7 @@ def read_now():
         WebDriverWait(browser, 1).until(element_present)
         classes = browser.find_elements_by_class_name("fc-time-grid-event.fc-event.fc-start.fc-end")
         print("\nUp next, you have..")
-    
+       
         for clas in classes:
             try:
                 clas.click()
@@ -102,7 +116,26 @@ def read_now():
                     break
                 browser.find_element_by_class_name("close.text-white").click()
     
-            except exceptions.ElementNotInteractableException as e:
+            except exceptions.ElementNotInteractableException:
+                browser.implicitly_wait(3)
+                clas.click()
+                element_present = EC.visibility_of_element_located((By.CLASS_NAME, "dialogueTable"))
+                WebDriverWait(browser, 1).until(element_present)
+                table = browser.find_element_by_class_name("dialogueTable")
+                class_data = []
+    
+                for i in range(1,8):
+                    class_data.append(browser.find_element_by_xpath("//*[@id='eventModal']/div/div/div[2]/table/tr[{}]/td".format(str(i))).text) 
+                
+                tyme = str(datetime.datetime.now().date()) + " {}".format(class_data[4])
+                classtime = datetime.datetime.strptime(tyme, '%Y-%m-%d %I:%M %p')
+    
+                if(datetime.datetime.now() <= classtime):
+                    print((class_data[0] + " ({}) ".format(class_data[2]) + "\nfrom {} to {} ".format(class_data[4],class_data[5]) + "\nat {}.".format(class_data[1])) + "\n\n")
+                    break
+                browser.find_element_by_class_name("close.text-white").click()
+            
+            except:
                 print("(Unable to fetch class)\n")
                 continue
     

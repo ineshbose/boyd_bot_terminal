@@ -3,9 +3,9 @@ This repository is for terminal version of the Boyd Bot.
 
 ## Set-Up
 ### Packages
-[Selenium](https://github.com/SeleniumHQ/selenium) is the only package needed for this bot.
+[icalendar](https://github.com/SeleniumHQ/selenium) is the only package needed for this bot.
 ```
-$ pip install selenium
+$ pip install icalendar
 ```
 Rest of the packages are built-in.
 

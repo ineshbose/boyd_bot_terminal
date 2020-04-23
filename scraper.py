@@ -30,22 +30,30 @@ def format_event(event):
 
 
 def read_now():
+    clas = []
     date1 = datetime.datetime.now()
     date2 = date1 + datetime.timedelta(days=1)
     for event in cal.walk('vevent'):
         if event['dtstart'].dt > tmzn.localize(date1) and event['dtend'].dt < tmzn.localize(date2):
             print(format_event(event))
+            clas.append(event)
             break
+    if clas == []:
+        print('No class!')
 
 
 def read_date(date_entry=datetime.datetime.now().strftime('%d/%m/%Y')):
     try:
+        classes = []
         day, month, year = map(int, date_entry.split('/'))
         date1 = datetime.datetime(year, month, day)
         date2 = date1 + datetime.timedelta(days=1)
         for event in cal.walk('vevent'):
             if event['dtstart'].dt > tmzn.localize(date1) and event['dtend'].dt < tmzn.localize(date2):
                 print(format_event(event))
+                classes.append(event)
+        if classes == []:
+            print('There seem to be no classes.')
     except:
         print('Wrong format!')
 

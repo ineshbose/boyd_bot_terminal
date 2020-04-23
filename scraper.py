@@ -16,32 +16,39 @@ def login():
     try:
         global cal
         cal = Calendar.from_ical(r.content)
+        r.close()
         print("\nLogin successful!\n")
     
     except:
+        r.close()
         print("\nInvalid Credentials. Try again.\n")
         login()
+
+
+def format_event(event):
+    return event['summary'].split(')')[0]+')\nfrom '  + event['dtstart'].dt.strftime('%I:%M%p') + ' to ' + event['dtend'].dt.strftime('%I:%M%p') + '\nat ' + event['location'] + '.\n\n' if '(' in event['summary'] else event['summary']+'\nfrom '  + event['dtstart'].dt.strftime('%I:%M%p') + ' to ' + event['dtend'].dt.strftime('%I:%M%p') + '\nat ' + event['location'] + '.\n\n'
+
 
 def read_now():
     date1 = datetime.datetime.now()
     date2 = date1 + datetime.timedelta(days=1)
     for event in cal.walk('vevent'):
         if event['dtstart'].dt > tmzn.localize(date1) and event['dtend'].dt < tmzn.localize(date2):
-            print(event['summary'].split(')')[0]+')')
-            print('from ' + event['dtstart'].dt.strftime('%I:%M%p') + ' to ' + event['dtend'].dt.strftime('%I:%M%p'))
-            print('at ' + event['location'])
-            print()
+            print(format_event(event))
+            break
+
 
 def read_date(date_entry=datetime.datetime.now().strftime('%d/%m/%Y')):
-    day, month, year = map(int, date_entry.split('/'))
-    date1 = datetime.datetime(year, month, day)
-    date2 = date1 + datetime.timedelta(days=1)
-    for event in cal.walk('vevent'):
-        if event['dtstart'].dt > tmzn.localize(date1) and event['dtend'].dt < tmzn.localize(date2):
-            print(event['summary'].split(')')[0]+')')
-            print('from ' + event['dtstart'].dt.strftime('%I:%M%p') + ' to ' + event['dtend'].dt.strftime('%I:%M%p'))
-            print('at ' + event['location'])
-            print()
+    try:
+        day, month, year = map(int, date_entry.split('/'))
+        date1 = datetime.datetime(year, month, day)
+        date2 = date1 + datetime.timedelta(days=1)
+        for event in cal.walk('vevent'):
+            if event['dtstart'].dt > tmzn.localize(date1) and event['dtend'].dt < tmzn.localize(date2):
+                print(format_event(event))
+    except:
+        print('Wrong format!')
+
 
 if __name__ == "__main__": 
     login()

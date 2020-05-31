@@ -85,7 +85,6 @@ def read_date(date_entry=None):
         else:
             date1 = datetime.datetime.now(tz=tmzn)
         date2 = date1.replace(hour=23, minute=59, second=59)
-        print(date1)
         
         for event in cal.walk('vevent'):
             if event['dtstart'].dt > date1 and event['dtend'].dt < date2:

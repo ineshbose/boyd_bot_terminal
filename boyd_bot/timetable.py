@@ -19,19 +19,17 @@ parser.add_argument('-d','--date', help="read specific day's timetable")
 def login():
     global uid, pw
     if uid == "" and pw == "":
-        print("Login credentials not provided.",
-        "It's recommended that you add them in the script.")
         uid = input("UID: ")
         pw = getpass("Password: ")
     r = requests.get(cal_url, auth=(uid,pw))
-
     try:
         global cal
         cal = Calendar.from_ical(r.content)
-    
     except:
         print("Invalid login credentials provided.")
-        exit()
+        uid = ""
+        pw = ""
+        login()
 
 
 def format_event(event):
@@ -69,7 +67,7 @@ def no_args():
         print("Invalid input.")
 
 
-if __name__ == "__main__":
+def main():
     args = parser.parse_args()
     login()
     if args.today:

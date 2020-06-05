@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name='boyd_bot_terminal',
+    name='boyd_bot_glasgow',
     version="1.4.1",
     packages=find_packages(),
     install_requires=requirements,
@@ -15,8 +15,10 @@ setup(
     author='Inesh Bose',
     desription='University Timetable on your Terminal!',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     license='MIT',
     url='https://github.com/ineshbose/boyd_bot_terminal',
+    keywords='glasgow university timetable',
 
     entry_points={
         "console_scripts": [

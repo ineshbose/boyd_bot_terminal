@@ -10,18 +10,19 @@ cal_url = "https://frontdoor.spa.gla.ac.uk/spacett/download/uogtimetable.ics"
 # A threshold for string-matching
 fuzz_threshold = 40
 
-# University UID
-uid = ""
-
-# University Password
-pw = ""
+# Instance of icalendar.Calendar
+cal = Calendar()
 ```
 
 
-## `login()`
+## `login(uid="", pw="")`
 
 Logins in user with the provided credentials. <br>
 A request fetches content from a URL with authentication, and `icalendar.Calendar` creates a calendar from that content. If the operation was successful, the user was successfully logged in. If not, `icalendar.Calendar` throws an exception since the content was not suitable to create a calendar which means the credentials were unable to fetch content through the request; therefore the login was unsuccessful.
+
+|                         Parameters                        |   Returns  |
+|-----------------------------------------------------------|------------|
+| **`uid`:** the portal ID<br>**`pw`:** the portal password | **`None`** |
 
 
 
@@ -65,9 +66,3 @@ Converts a string into `datetime` else raises error.
 |             Parameters             |                   Returns                    |
 |------------------------------------|----------------------------------------------|
 | **`date_entry`:** `str` to convert | **`datetime`:** string converted to datetime |
-
-
-
-## `no_args()` (deprecated)
-
-A menu is presented if there are no system arguments.

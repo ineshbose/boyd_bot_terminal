@@ -19,7 +19,7 @@ You can also clone this repository and install it or run the script.
 $ git clone https://github.com/ineshbose/boyd_bot_terminal
 $ cd boyd_bot_terminal
 $ python setup.py install   # if you want to install
-$ python boyd_bot/timetable.py  # if you want to run script
+$ python boyd_bot           # if you want to run script
 ```
 
 

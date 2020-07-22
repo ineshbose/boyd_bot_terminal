@@ -1,26 +1,17 @@
-import os, requests
+import requests
 from icalendar import Calendar
-import datetime, pytz, argparse
+import datetime, pytz
 from getpass import getpass
 from fuzzywuzzy import fuzz
 
 tmzn = pytz.timezone("UTC")
 cal_url = "https://frontdoor.spa.gla.ac.uk/spacett/download/uogtimetable.ics"
 fuzz_threshold = 36
-uid = ""
-pw = ""
-
 cal = Calendar()
-parser = argparse.ArgumentParser()
-parser.add_argument("-t", "--today", help="read today's timetable", action="store_true")
-parser.add_argument("-n", "--next", help="read next class", action="store_true")
-parser.add_argument("-d", "--date", help="read specific day's timetable")
-parser.add_argument("-c", "--class_name", help="search for specific class")
 
 
-def login():
-    global uid, pw
-    if uid == "" and pw == "":
+def login(uid=None, pw=None):
+    if not (uid and pw):
         uid = input("University ID: ")
         pw = getpass("Password: ")
     try:
@@ -28,12 +19,9 @@ def login():
         cal = Calendar.from_ical(requests.get(cal_url, auth=(uid, pw)).content)
     except ValueError:
         print("Invalid login credentials provided.")
-        uid = ""
-        pw = ""
         login()
     except Exception as e:
-        print("Something went wrong. {}".format(e.__str__()))
-        exit()
+        raise Exception("Something went wrong. {}".format(e.__str__())) from None
 
 
 def format_event(event):
@@ -93,43 +81,4 @@ def dateparse(date_entry):
         day, month, year = map(int, date_entry.split("/"))
         return datetime.datetime(year, month, day)
     except ValueError:
-        print("Date entered in invalid format!")
-        exit()
-
-
-def no_args():
-    print("\nWhat's up?\n1 - Today\n2 - On Specific Day\n3 - Up Next / Now")
-    choice = input("Input: ")
-    if choice == "1":
-        read(datetime.datetime.now(tz=tmzn))
-    elif choice == "2":
-        read(dateparse(input("Enter date in DD/MM/YYYY format: ")))
-    elif choice == "3":
-        read()
-    else:
-        print("Invalid input.")
-
-
-def main():
-
-    sys_args = parser.parse_args()
-    args = []
-    login()
-
-    if sys_args.today:
-        args.append(datetime.datetime.now(tz=tmzn))
-    elif sys_args.date:
-        args.append(dateparse(sys_args.date))
-    elif sys_args.next:
-        args.append(None)
-    else:
-        return no_args()
-
-    if sys_args.class_name:
-        args.append(sys_args.class_name)
-
-    read(*args)
-
-
-if __name__ == "__main__":
-    main()
+        raise Exception("Date entered in invalid format!") from None

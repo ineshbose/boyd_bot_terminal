@@ -8,7 +8,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="boyd_bot_glasgow",
-    version="1.5.0",
+    version="1.6.0",
     packages=find_packages(),
     install_requires=requirements,
     author="Inesh Bose",
@@ -18,5 +18,5 @@ setup(
     license="MIT",
     url="https://github.com/ineshbose/boyd_bot_terminal",
     keywords="glasgow university timetable",
-    entry_points={"console_scripts": ["boyd_bot = boyd_bot.timetable:main",],},
+    entry_points={"console_scripts": ["boyd_bot = boyd_bot.__main__:main",],},
 )

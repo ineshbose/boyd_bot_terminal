@@ -1,11 +1,11 @@
 # Boyd Bot (Terminal)
 
 ```python
-# Used to localize time and compare datetimes
-tmzn = pytz.timezone('UTC')
-
 # This can be changed to any university's URL
 cal_url = "https://frontdoor.spa.gla.ac.uk/spacett/download/uogtimetable.ics" 
+
+# Used to localize time and compare datetimes
+tmzn = pytz.timezone('UTC')
 
 # A threshold for string-matching
 fuzz_threshold = 40
@@ -49,13 +49,13 @@ Main function to be called from `timetable` and returns a message accordingly.
 
 
 
-## `iterate(start_date=None, class_name=None)`
+## `iterate(start_date, class_name)`
 
 Iterates through all events in the calendar and returns events that start and end between the beginning of that date (00:00) and end of that date (23:59).
 
-|                                                   Parameters                                                |          Returns           |
-|-------------------------------------------------------------------------------------------------------------|----------------------------|
-| **`start_date`:** `date-time` start parameter if found<br>**`class_name`:** `class-name` parameter if found | **`list`:** list of events |
+|                                         Parameters                                        |          Returns           |
+|-------------------------------------------------------------------------------------------|----------------------------|
+| **`start_date`:** `date-time` start parameter<br>**`class_name`:** `class-name` parameter | **`list`:** list of events |
 
 
 
